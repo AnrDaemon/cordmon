@@ -1,0 +1,6 @@
+socket_connect() failed.
+Reason: () No route to host
+socket_write() failed.
+Reason: () Success
+socket_write() failed.
+Reason: () Success

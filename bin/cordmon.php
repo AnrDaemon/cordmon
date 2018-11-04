@@ -1,16 +1,14 @@
 <?php
 	namespace cordmon;
 
-	require __DIR__ . '//..//vendor/autoload.php';
+	require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-	error_reporting(E_ALL);
-	ini_set('display_errors', 1);
 	//ob_implicit_flush();
 
 	set_time_limit(0);
 
 	$settings = new BuildingSettings;
-	
+
 	$building = new Building($settings);
 
 	$log = new Logger($building->settings->logs);
@@ -42,14 +40,14 @@
 			{
 				$building->device[$unit->device_no]->do_port_query($unit->port_no);
 			}
-			
-			
+
+
 			// See if status has changed
 			if ($unit->detect_change())
-			{	
-				// Log changes 
+			{
+				// Log changes
 				$building->log[] = $log->write(date("H:i:s Y-m-d") . ":  Change Deteted on Unit No:  {$unit->unit_no}...\nDevice\t\tPort\t\tPin\t\tOld Val\t\tNew Val\n{$unit->device_no}\t\t{$unit->port_no}\t\t{$unit->pin_no}\t\t{$unit->previous_status}\t\t{$unit->status}\n", 0);
-				
+
 				// If it's an emergency, make call
 				if ($unit->previous_status > $unit->status)
 				{
@@ -59,24 +57,24 @@
 						$client->originate($unit->unit_no);
 					}
 				}
-				
+
 				// If status changed to non-emergency, check the channel, and clear it if necessary
 				elseif ($unit->previous_status < $unit->status && $unit->previous_status)
 				{
 					$client->hangup($unit->unit_no);
 				}
 			}
-			
+
 
 			// Output to Display
-			
+
 			// Keep a list of recently changed units
-			
-			if ($unit->previous_status != $unit->status || ! isset($unit->previous_status)) 
+
+			if ($unit->previous_status != $unit->status || ! isset($unit->previous_status))
 			{
 				$blinkers[$unit->unit_no] = $blink_qty;
 			}
-				
+
 			// Keep track of pulled courds
 			if ($unit->status == 0)
 			{
@@ -86,9 +84,9 @@
 			{
 					unset($c["$unit->unit_no"]);
 			}
-			
+
 			// Make Header if row # is 0
-			if ($row == 0)  
+			if ($row == 0)
 			{
 				echo $building->settings->name . "\t" . date("H:m:s") . "\r\n";
 				for ($i = 0; $i < 10; $i++)
@@ -103,10 +101,10 @@
 			}
 			// ... header done
 
-			
+
 			// Make a row in the main output
 			// If the unit is set to blink, and it's an odd numbered pass...
-			
+
 			if ($blinkers[$unit->unit_no] % 2 == 1)
 			{
 				echo "\033[1;37m";  // ... bright white
@@ -119,15 +117,15 @@
 			else  // ... and red if triggered
 			{
 				echo "\033[0;31m";
-			}		
-			
-		
+			}
+
+
 			// Print row to screen
 			echo ($unit->unit_no . ": " . $unit->device_no . '/' . $unit->port_no . '/' . $unit->pin_no . ' ' . $unit->status . " \t");
 
 			// back to grey (default) console color
 			echo "\033[0;37m";
-			
+
 			// increment row before deciding to newline, or 0 % X always is 0, thus true 1st pass
 			$row++;
 
@@ -137,9 +135,9 @@
 				echo ("\r\n\r\n");
 			}
 			// ... row done.
-			
-			
-		
+
+
+
 			// decrement remaining blinks for this $unit
 			if ($blinkers[$unit->unit_no] > 0)
 			{
@@ -155,7 +153,7 @@
 		}
 
 		// Make footer...
-		
+
 		// Alternate blinking a "###" per pass
 		$m = ! $m;
 		echo count($c) . " cords pulled.  Processing... ";
@@ -164,21 +162,15 @@
 			echo "###";
 		}
 		// ...footer done
-		
+
 		// Reset or increment counters
 		$c = NULL;
 
 		$row = 0;
-		
+
 		// Display for 0.25 s and clear screen
-			
-		
+
+
 		usleep(250000);
 		system("clear");
 	}
-?>
-
-
-
-
-

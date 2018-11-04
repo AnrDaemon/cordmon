@@ -1,23 +1,22 @@
 <?php
+	namespace cordmon;
+
+	require_once dirname(__DIR__) . '/vendor/autoload.php';
+
 	ob_implicit_flush();
-	
-	include "/srv/cordmon/src/BuildingSettings.php";
-	include "/srv/cordmon/src/GUISocket.php";  // file is being used and works with other scripts
-	
-	var_dump(file_exists("/srv/cordmon/src/BuildingSettings.php"));   // true
-	
+
 	$settings = new BuildingSettings;  // exception, class not found
-	
-	$server = new GUISocket($settings); 
-	
+
+	$server = new GUISocket($settings);
+
 	$server = $server->create_server();
-	
+
 
 	if (false === $server)
 	{
 		throw new Exception('Could not listen');
 	}
-		
+
 	$server->SetClient(stream_socket_accept($server));
 	if (false !== $server->client)
 	{
@@ -64,4 +63,3 @@
 	socket_close($spawn);
 	socket_close($socket);
 	*/
-?>

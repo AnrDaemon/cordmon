@@ -15,7 +15,7 @@
 			$this->create_socket();
 			$this->connect_socket();
 			$this->eth32_reset();
-			
+
 			for ($i = 0; $i < 6; $i++)
 			{
 				if (pow(2, $i) & $this->port_mask)
@@ -28,7 +28,7 @@
 				{
 					$log->write("Skipping port " . $i . "\n", 0);
 				}
-				
+
 			}
 		}
 
@@ -98,7 +98,7 @@
 		{
 			$log = new Logger($this->logs);
 				$cmd = chr(3) . chr(0) . chr($port_no) . chr(0) . chr(0);
-				$result = socket_write($this->socket, $cmd, strlen($cmd));				
+				$result = socket_write($this->socket, $cmd, strlen($cmd));
 				if ($result === false)
 				{
 					$log->write("socket_write() failed.\nReason: ($result) " . socket_strerror(socket_last_error($socket)) . "\n", 1);
@@ -146,5 +146,3 @@
 			return($this->port[$port_no]->port_value);
 		}
 	}
-
-?>

@@ -11,9 +11,9 @@
 		{
 			$this->settings = $settings;
 			$this->subnet = $this->settings->subnet;
-			
+
 			$log = new Logger($settings->logs);
-			
+
 			for ($i = 0; $i < count($settings->devices); $i++)
 			{
 				$log->write("Setting up device " . $i . "\n", 0);
@@ -23,5 +23,3 @@
 		}
 
 	}
-
-?>

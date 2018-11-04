@@ -15,5 +15,3 @@ $client = new Socket;
 
 socket_close($server->socket);
 socket_close($server->spawn);
-
-?>

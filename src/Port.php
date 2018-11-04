@@ -16,7 +16,7 @@
 			$this->device_no = $device_no;
 			$this->port_no = $port_no;
 			if (isset($building->settings->devices[$device_no]["ports"][$port_no]["pin_mask"]))
-			{	
+			{
 				$this->pin_mask = $building->settings->devices[$device_no]["ports"][$port_no]["pin_mask"];
 			}
 			elseif ($port_no < 4)
@@ -44,4 +44,3 @@
 		}
 
 	}
-?>
